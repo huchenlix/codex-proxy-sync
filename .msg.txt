@@ -1,0 +1,1 @@
+补充「重启 Codex 才生效」这一关键步骤，并在 LICENSE 中署名初代贡献者 lithiurn

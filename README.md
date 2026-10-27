@@ -45,6 +45,16 @@ powershell -ExecutionPolicy Bypass -File .\codex-proxy-sync.ps1
 powershell -ExecutionPolicy Bypass -File .\codex-proxy-sync.ps1 -DryRun
 ```
 
+### 别忘了最后一步：重启 Codex
+
+**写完 `.env` 不会立刻生效。** Codex CLI 只在**进程启动时**读取一次 `.env`，会话过程中不会重新加载。
+
+所以脚本跑完后，必须**完全退出并重新启动 Codex**，新配置才会被读进去。
+
+> 这一步最容易漏。不重启的话，你会看到 Codex 照旧重连 5 次然后失败，然后误以为脚本没起作用 —— 其实配置早写好了，只是没被加载。
+
+换个端口后同理：重跑脚本，**然后重启 Codex**。
+
 ---
 
 ## 参数
@@ -146,8 +156,10 @@ PowerShell 5.1 会把**没有 BOM 的 `.ps1` 当成 ANSI 解码**。如果你用
 
 **写入后 Codex 还是连不上**
 
+- **先确认你重启过 Codex**。`.env` 只在启动时读一次，这是最常见的原因。
+- 确认代理端口没错：跑一次 `-DryRun` 看看写进去的是什么。
 - `.env` 只对 Codex 生效。想让当前终端的 curl / git / npm 也走代理，加 `-ApplyToSession`。
-- 换端口后要**重跑一次**脚本，`.env` 不会自动更新。
+- 换端口后要**重跑一次**脚本再重启 Codex，`.env` 不会自动更新。
 
 ---
 
